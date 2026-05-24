@@ -1,517 +1,363 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
 
+<!doctype html>
+<html lang="zh-CN" class="h-full scroll-smooth">
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="x5-fullscreen" content="true">
-<meta name="full-screen" content="yes">
-<meta name="theme-color" content="#317EFB" />
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/categories/%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:locale" content="zh_CN">
-<meta property="article:author" content="Natdog">
-<meta name="twitter:card" content="summary">
-
-
-<title >Hexo</title>
-
-<!-- Favicon -->
-
-    <link href='/img/favicon.svg?v=2.2.7' rel='icon' type='image/png' sizes='16x16' ></link>
-
-
-    <link href='/img/favicon.svg?v=2.2.7' rel='icon' type='image/png' sizes='32x32' ></link>
-
-
-
-
-<!-- Plugin -->
-
-
-
-
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta name="generator" content="Hexo " />
+    <!-- FOUC prevention: apply dark mode class before first paint.
+         Flow: read default → build valid states → read localStorage (try/catch for Safari private mode)
+         → validate saved state → set data-theme-state on <html> → resolve effective dark/light
+         → add .dark class and colorScheme if needed. -->
+    <script>(function(){const d="light";window.__themeDefault=d;const s=d==='system'?['system','light','dark']:['light','dark'];let sv;try{sv=localStorage.getItem('theme')}catch(e){}if(!sv||s.indexOf(sv)===-1)sv=d;const h=document.documentElement;h.setAttribute('data-theme-state',sv);const k=sv==='dark'||(sv!=='light'&&window.matchMedia('(prefers-color-scheme:dark)').matches);if(k)h.classList.add('dark');h.style.colorScheme=k?'dark':'light';})()</script>
     
-<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&display=swap&family=Yuji+Syuku&display=optional&family=Zen+Old+Mincho:wght@400;600&display=swap&family=Noto+Serif+JP:wght@400;600&display=swap&family=Noto+Serif+SC:wght@400;600&display=swap&family=Cormorant+Garamond:wght@400;600&display=swap&family=Fira+Code:wght@400;500&display=swap" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     
-<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+    
+    
+    
+    
+    <title>分类: 算子开发 | Hexo</title>
 
+    <!-- SEO Meta -->
+    
+    
+    <meta name="author" content="Natdog" />
     
     
 
-
-
-
-<!-- Icon -->
-
+    <!-- Open Graph -->
+    <meta property="og:title" content="分类: 算子开发 | Hexo" />
     
-<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+    <meta property="og:url" content="http://example.com/categories/%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/index.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Hexo" />
+    
 
-
-
-
-<!-- Variable -->
-<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Natdog","root":"/","typed_text":null,"theme_version":"2.2.7","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/favicon.svg","icon16":"/img/favicon.svg","icon32":"/img/favicon.svg","apple_touch_icon":null,"webmanifest":null,"visibilitychange":false,"hidden":"/failure.ico","show_text":"(/≧▽≦/)咦！又好了！","hide_text":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","sticky":"置顶","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"default","height_limit":false},"toc":{"post_title":true},"live_time":{"start_time":"","prefix":"博客已萌萌哒运行 undefined 天"},"danmu":{"enable":false,"el":".trm-banner"}};</script>
-<script id="async-page-config">window.PAGE_CONFIG = {"isPost":false,"isHome":false,"postUpdate":"2026-05-24 09:40:30"};</script>
-
-<!-- Theme mode css -->
-<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.2.7" id="trm-switch-style">
-<script>
-    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
-    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
-    let type = catchMode === 'style-dark' ? 'add' : 'remove';
-    document.documentElement.classList[type]('dark')
-</script>
-
-<!-- CDN -->
-
-
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="分类: 算子开发 | Hexo" />
     
     
 
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://example.com/categories/%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/index.html" />
+
+    <!-- Favicon -->
+    
+    <link rel="icon" href="/favicon.svg" />
+    
+
+    <!-- RSS -->
+    
+
+    <!-- CSS -->
+    
+    <link rel="stylesheet" href="/css/style.min.css?v=ce5f1aad">
+</head>
 
 
-<!-- Site Analytics -->
+<body class="h-full fog-bg text-slate-800">
+    
+    
+<svg width="0" height="0" class="absolute pointer-events-none" aria-hidden="true">
+    <defs>
+        <filter id="seal-roughness" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
+        </filter>
+        <filter id="text-erosion">
+            <feTurbulence type="fractalNoise" baseFrequency="0.15" numOctaves="1" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" />
+        </filter>
+    </defs>
+</svg>
 
- 
-<meta name="generator" content="Hexo 7.3.0"></head>
+    
 
-<body>
+    
 
-  <!-- app wrapper -->
-  <div class="trm-app-frame">
+    <div class="min-h-full px-4 pt-14 pb-6 md:pb-5">
 
-    <!-- page preloader -->
-    <div class="trm-preloader">
-    <div class="trm-holder">
-        <div class="preloader">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
+        <!-- Paper Card -->
+        <div
+            class="paper relative mx-auto w-full max-w-4xl rounded-xl px-5 sm:px-8 md:px-12 lg:px-14 pt-10 pb-6 md:pt-12 md:pb-8">
+
+            
+<header class="relative" data-pagefind-ignore>
+
+    <div class="relative flex items-start justify-center">
+        <div class="text-center">
+            <div class="relative inline-block">
+                
+                <p class="site-title">
+                    <a href="/">Hexo</a>
+                </p>
+                
+                <!-- Seal: Mathematically Centered -->
+                
+                <div
+                    class="absolute left-full top-1/2 -translate-y-1/2 ml-1 sm:ml-4 origin-left scale-75 sm:scale-110">
+                    
+<svg width="52" height="52" viewBox="0 0 100 100" aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg">
+    <path d="M15,12 Q50,5 85,12 Q95,50 88,88 Q50,95 12,88 Q5,50 15,12 Z"
+        fill="var(--color-seal)" filter="url(#seal-roughness)" opacity="0.92" />
+    <text x="50" y="50" text-anchor="middle" dominant-baseline="central"
+        font-size="42" fill="rgba(255,255,255,0.92)" filter="url(#text-erosion)"
+        class="seal-text select-none">白</text>
+</svg>
+
+                </div>
+                
+            </div>
+            
+            <div class="mt-3 sm:mt-4 flex justify-center gap-2">
+                
+                
+                
+                <button id="themeToggle" class="group header-pill-btn" aria-label="浅色" data-label-system="跟随系统" data-label-light="浅色" data-label-dark="深色">
+                    
+<svg data-icon="system" class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <rect x="2" y="3" width="20" height="14" rx="2" stroke-width="1.5"/>
+    <path d="M8 21h8M12 17v4" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
+
+                    
+<svg data-icon="light" class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="4" stroke-width="1.5"/>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
+
+                    
+<svg data-icon="dark" class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+                </button>
+                
+                
+            </div>
         </div>
     </div>
-</div>
-    <!-- page preloader end -->
+</header>
 
-    <!-- change mode preloader -->
-    <div class="trm-mode-swich-animation-frame">
-    <div class="trm-mode-swich-animation">
-        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
-        <div class="trm-horizon"></div>
-        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+<!-- Navigation -->
+<nav class="mt-8 md:mt-10" aria-label="菜单" data-pagefind-ignore>
+    <!-- Mobile Toggle -->
+    <div class="flex items-center justify-center md:hidden">
+        <button id="menuBtn"
+            class="focus-elegant inline-flex items-center gap-2 rounded-full border border-slate-200 bg-paper/95 px-4 py-2 text-sm text-slate-700 shadow-xs"
+            aria-expanded="false" aria-controls="mobileMenu">
+            <span class="text-base leading-none tracking-widest">菜单</span>
+            
+<svg class="size-4 text-slate-500 transition-transform duration-200" id="menuChevron"
+    viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+    <path fill-rule="evenodd"
+        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08z"
+        clip-rule="evenodd" />
+</svg>
+
+        </button>
     </div>
-</div>
-    <!-- change mode preloader end -->
 
-      <!-- scroll container -->
-      <div id="trm-dynamic-content" class="trm-swup-animation">
-        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
-            <!-- top bar -->
-            <header class="trm-top-bar">
-	<div class="container">
-		<div class="trm-left-side">
-			<!-- logo -->
-<a href="/" class="trm-logo-frame trm-anima-link">
-    
-        <img alt="logo" src="/img/favicon.svg">
-    
-    
-        <div class="trm-logo-text">
-            Async<span>Theme</span>
-        </div>
-    
-</a>
-<!-- logo end -->
-		</div>
-		<div class="trm-right-side">
-			<!-- menu -->
-<div class="trm-menu">
-    <nav>
-        <ul>
+    <!-- Desktop Menu -->
+    <div class="hidden md:block">
+        <ul class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-base text-slate-700 px-4">
             
-            <li class="menu-item-has-children ">
-                <a  href="/" target="">
-                    首页
-                </a>
-                
-            </li>
+            <li><a class="focus-elegant rounded-md px-2 py-1 hover:text-seal transition-colors"
+                    href="/" >Home</a></li>
             
-            <li class="menu-item-has-children ">
-                <a  href="/archives/" target="">
-                    归档
-                </a>
-                
-            </li>
+            <li class="nav-divider text-slate-400 select-none" role="separator" aria-hidden="true">/</li>
+            
+            
+            <li><a class="focus-elegant rounded-md px-2 py-1 hover:text-seal transition-colors"
+                    href="/archives" >Archives</a></li>
+            
+            <li class="nav-divider text-slate-400 select-none" role="separator" aria-hidden="true">/</li>
+            
+            
+            <li><a class="focus-elegant rounded-md px-2 py-1 hover:text-seal transition-colors"
+                    href="/categories" >Categories</a></li>
+            
+            <li class="nav-divider text-slate-400 select-none" role="separator" aria-hidden="true">/</li>
+            
+            
+            <li><a class="focus-elegant rounded-md px-2 py-1 hover:text-seal transition-colors"
+                    href="/tags" >Tags</a></li>
+            
             
         </ul>
-    </nav>
-</div>
-<!-- menu end -->
-			
-    <!-- mode switcher place -->
-    <div class="trm-mode-switcher-place">
-        <div class="trm-mode-switcher">
-            <i class="iconfont far fa-sun"></i>
-            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
-            <label class="trm-swich" for="trm-swich"></label>
-            <i class="iconfont far fa-moon"></i>
-        </div>
     </div>
-    <!-- mode switcher place end -->
 
-			
-		</div>
-		<div class="trm-menu-btn">
-			<span></span>
-		</div>
-	</div>
-</header>
-            <!-- top bar end -->
-
-            <!-- body -->
+    <!-- Mobile Menu Panel -->
+    <div id="mobileMenu" class="menu-panel md:hidden mt-4" data-open="false">
+        <ul
+            class="mx-auto max-w-sm max-h-menu overflow-y-auto rounded-2xl border border-slate-200 bg-paper/95 shadow-xs">
             
-
-<div class="trm-content-start">
-    <!-- banner -->
-    <div class="trm-banner">
-    
-    <!-- banner cover -->
-    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
-    <!-- banner cover end -->
-    
-
-    <!-- banner content -->
-    <div class="trm-banner-content trm-overlay">
-        <div class="container">
-            <div class="row">
-                
-                <div class="col-lg-4"></div>
-                
-                <div class="col-lg-8">
-
-                    <!-- banner title -->
-                    <div class="trm-banner-text ">
-                        <div class="trm-label trm-mb-20">
-                            The article archive
-                        </div>
-                        <h1 class="trm-mb-30 trm-hsmb-font">
-                            云间连下榻，<br>天上接行杯。
-                        </h1>
-
-                        
-                            <ul class="trm-breadcrumbs trm-label">
-                                <li>
-                                    <a href="/" class="trm-anima-link">Home</a>
-                                </li>
-                                <li>
-                                    <span>
-                                        categories
-                                    </span>
-                                </li>
-                            </ul>
-                        
-                    </div>
-                    <!-- banner title end -->
-
-                    <!-- scroll hint -->
-                    <span id="scroll-triger" class="trm-scroll-hint-frame">
-                        <div class="trm-scroll-hint"></div>
-                        <span class="trm-label">Scroll down</span>
-                    </span>
-                    <!-- scroll hint end -->
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- banner content end -->
-</div>
-    <!-- banner end -->
-    <div class="container">
-        <div class="row">
+            <li><a class="focus-elegant block px-6 py-3 text-center text-slate-800 hover:text-seal hover:bg-seal/5 transition-colors"
+                    href="/" >Home</a></li>
             
-                <div class="trm-page-sidebar col-lg-4 hidden-sm">
-                    <!-- main card -->
-                    <div class="trm-main-card-frame trm-sidebar">
-    <div class="trm-main-card"> 
-        <!-- card header -->
-<div class="trm-mc-header">
-    <div class="trm-avatar-frame trm-mb-20">
-        <img alt="Avatar" class="trm-avatar" src="/img/avatar.jpg">
+            <li class="h-px bg-slate-200/70" role="separator" aria-hidden="true"></li>
+            
+            
+            <li><a class="focus-elegant block px-6 py-3 text-center text-slate-800 hover:text-seal hover:bg-seal/5 transition-colors"
+                    href="/archives" >Archives</a></li>
+            
+            <li class="h-px bg-slate-200/70" role="separator" aria-hidden="true"></li>
+            
+            
+            <li><a class="focus-elegant block px-6 py-3 text-center text-slate-800 hover:text-seal hover:bg-seal/5 transition-colors"
+                    href="/categories" >Categories</a></li>
+            
+            <li class="h-px bg-slate-200/70" role="separator" aria-hidden="true"></li>
+            
+            
+            <li><a class="focus-elegant block px-6 py-3 text-center text-slate-800 hover:text-seal hover:bg-seal/5 transition-colors"
+                    href="/tags" >Tags</a></li>
+            
+            
+        </ul>
     </div>
-    <h5 class="trm-name trm-mb-15">
-        ThemeAsync
-    </h5>
-    
+</nav>
+
+
+            <!-- Main Content -->
+            <main class="section-divider">
+                
+<section class="section-shell">
+    <header class="section-header">
+        <h1 class="section-title">
+            
+            分类: 算子开发
+            
+        </h1>
+        
+<div class="my-4 flex items-center justify-center gap-3" aria-hidden="true">
+    <div class="h-px flex-1 bg-linear-to-r from-transparent to-slate-300 max-w-divider"></div>
+    <svg class="h-4 w-10 shrink-0 text-slate-300" viewBox="0 0 40 10">
+        <circle cx="20" cy="5" r="3" fill="currentColor" opacity="0.9" />
+        <circle cx="4" cy="5" r="1.5" fill="currentColor" opacity="0.6" />
+        <circle cx="36" cy="5" r="1.5" fill="currentColor" opacity="0.6" />
+    </svg>
+    <div class="h-px flex-1 bg-linear-to-l from-transparent to-slate-300 max-w-divider"></div>
 </div>
-<!-- card header end -->
-        <!-- sidebar social -->
 
-<div class="trm-divider trm-mb-40 trm-mt-40"></div>
-<div class="trm-social">
-    
-        <a href="https://github.com" title="Github" rel="nofollow" target="_blank">
-            <i class="iconfont fab fa-github"></i>
-        </a>
-    
-</div>
+    </header>
 
-<!-- sidebar social end -->
-        <!-- info -->
-<div class="trm-divider trm-mb-40 trm-mt-40"></div>
-<ul class="trm-table trm-mb-20">
     
-        <li>
-            <div class="trm-label">
-                地址:
+        
+        
+            
+    
+    <div class="space-y-16 max-w-2xl mx-auto">
+        
+        
+            
+            
+                
+                
+                <div class="relative">
+                <h2 class="section-heading">
+                    
+<svg class="size-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+</svg>
+
+                    2026
+                </h2>
+                <div class="space-y-4">
+            
+            <article class="archive-item group">
+                <time datetime="2026-05-24" class="archive-date">
+                    2026/05/24
+                </time>
+                <h3 class="archive-title">
+                    <a href="/2026/05/24/1_%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/CUDA%20Softmax%20%E7%AE%97%E5%AD%90%E4%BC%98%E5%8C%96/" class="link-underline">CUDA Softmax 算子优化</a>
+                </h3>
+            </article>
+        
+            
+            
+            <article class="archive-item group">
+                <time datetime="2026-05-24" class="archive-date">
+                    2026/05/24
+                </time>
+                <h3 class="archive-title">
+                    <a href="/2026/05/24/1_%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/%E5%88%9B%E5%BB%BA%E7%AE%97%E5%AD%90/" class="link-underline">创建算子</a>
+                </h3>
+            </article>
+        
+            
+            
+            <article class="archive-item group">
+                <time datetime="2026-05-24" class="archive-date">
+                    2026/05/24
+                </time>
+                <h3 class="archive-title">
+                    <a href="/2026/05/24/1_%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/%E5%BC%80%E5%8F%91%E6%98%87%E8%85%BEAscendC%E7%AE%97%E5%AD%90/" class="link-underline">开发昇腾AscendC算子</a>
+                </h3>
+            </article>
+        
+        
             </div>
-            <div class="trm-label trm-label-light">
-                Mars
             </div>
-        </li>
-    
-</ul>
-<!-- info end -->
-
         
     </div>
-</div>
-                    <!-- main card end -->
-                </div>
-            
-            <div class="trm-page-content col-lg-8">
-                <div id="trm-content" class="trm-content">
-                    <div class="row">
-    <div class="col-lg-12">
-        <div class="trm-card">
-            <div style="padding: 0 20px;">
-                
-                    <ul class="trm-tag-list"><li class="trm-tag-list-item "><a class="category-list-link" href="/categories/%E7%8E%AF%E5%A2%83%E5%B7%A5%E7%A8%8B/">环境工程</a><span class="category-list-count">（5）</span></li><li class="trm-tag-list-item "><a class="category-list-link" href="/categories/%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/">算子开发</a><span class="category-list-count">（3）</span></li><li class="trm-tag-list-item "><a class="category-list-link" href="/categories/%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">踩坑记录</a><span class="category-list-count">（2）</span></li></ul>
-                
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- history -->
-
-<div class="row">
-    <div class="col-lg-12">
-        <!-- title -->
-        <h5 class="trm-title-with-divider">
-            
-                算子开发
-            
-            <span data-number="01"></span>
-        </h5>
-    </div>
-    <div class="col-lg-12">
-        <!-- timeline -->
-        <div class="trm-timeline">
-            
-            <div class="trm-timeline-item trm-scroll-animation">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2026/05/24/1_%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/CUDA%20Softmax%20%E7%AE%97%E5%AD%90%E4%BC%98%E5%8C%96/" class="trm-anima-link">
-                                        CUDA Softmax 算子优化
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">05/24</li>
-                                        <li class="trm-accent-color">00:00</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2026/05/24/1_%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/%E5%88%9B%E5%BB%BA%E7%AE%97%E5%AD%90/" class="trm-anima-link">
-                                        创建算子
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">05/24</li>
-                                        <li class="trm-accent-color">00:00</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2026/05/24/1_%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/%E5%BC%80%E5%8F%91%E6%98%87%E8%85%BEAscendC%E7%AE%97%E5%AD%90/" class="trm-anima-link">
-                                        开发昇腾AscendC算子
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">05/24</li>
-                                        <li class="trm-accent-color">00:00</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-        </div>
-        <!-- timeline end -->
-    </div>
-</div>
-
-<!-- history end -->
-
-
-    <div class="trm-pagination">
-        <span class="page-number current">1</span>
-    </div>
-
-
-
-
-
-                    <div class="trm-divider footer-divider"></div>
-
-                    <!-- footer -->
-                    <footer class="trm-footer-card trm-scroll-animation">
-
+        
     
+</section>
 
-    
+            </main>
 
-    
-        <div class="trm-footer-item">
-            <span>
-                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v7.3.0
-            </span>
-            <span class="footer-separator" data-separator=" | "></span>
-            <span> 
-                主题 - 
-                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
-                v2.2.7
-            </span>
-        </div>
-      
-
-     
-
-     
+            <footer class="section-divider" data-pagefind-ignore>
+    <div class="text-center text-sm text-slate-500 leading-relaxed">
+        <p>&copy; <span class="oldstyle-nums">2026</span> Hexo</p>
+        <p class="font-eng text-footnote tracking-wide opacity-90">Elegant theme by <a href="https://github.com/Acris/hexo-theme-shiro" target="_blank" rel="noopener noreferrer" class="link-muted">Shiro</a> · Made by <a href="https://acris.me" target="_blank" rel="noopener noreferrer" class="link-muted">Acris</a>
+                        with <span aria-label="love" title="love">❤️</span></p>
+    </div>
 </footer>
-                    <!-- footer end -->
 
-                </div>
-            </div>
         </div>
+
+        <!-- Note Text — decorative aside, not part of main content or footer -->
+        <aside class="mt-4 text-center" aria-hidden="true" role="presentation">
+            <p class="site-note font-title text-xs sm:text-sm text-slate-400/70 tracking-note font-light select-none" lang="ja">
+                白は、余白の名。
+            </p>
+        </aside>
     </div>
-</div>
-            <!-- body end -->
-
-            
-
-            
-<div class="trm-fixed-container">
-    
-    
-    
-    <div id="trm-back-top" class="trm-fixed-btn" data-title="回到顶部">
-        <i class="iconfont fas fa-arrow-up"></i>
-    </div>
-</div>
-        </div>
-      </div>
-      <!-- scroll container end -->
-  </div>
-  <!-- app wrapper end -->
-
-  
-  <!-- Plugin -->
-
-
-
 
     
-    
-<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
-
+    <button id="backToTop" class="back-to-top" data-visible="false" aria-label="回到顶部">
+        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+        </svg>
+    </button>
     
 
     
 
+    <!-- Scripts -->
     
-
-    <!-- 数学公式 -->
+    <script>window.__i18n = {"clipboard_copy":"复制代码","clipboard_copied":"已复制","gallery_visit_source":"查看原始链接","gallery_view_image":"查看图片","search":{"button":"搜索","placeholder":"搜索文章…","close":"关闭","zero_results":"未找到与 \"[SEARCH_TERM]\" 相关的内容","one_result":"找到 [COUNT] 个与 \"[SEARCH_TERM]\" 相关的结果","many_results":"找到 [COUNT] 个与 \"[SEARCH_TERM]\" 相关的结果","loading":"加载中…"}};</script>
     
-
-    <!-- 评论插件 -->
     
-
-		
-
-
-
-
-    <!-- Service Worker -->
     
-    <!-- baidu push -->
     
-
-
-<script id="async-script" src="/js/main.js?v=2.2.7"></script>
-
-<!-- CDN -->
-
-
+    <script defer src="/js/progress.js?v=a52f509d"></script>
     
-
     
-
+    <script defer src="/js/theme-toggle.js?v=0a313889"></script>
     
-
-
+    
+    <script defer src="/js/mobile-menu.js?v=9c4e4c22"></script>
+    
+    
+    
 
 </body>
-
 </html>
