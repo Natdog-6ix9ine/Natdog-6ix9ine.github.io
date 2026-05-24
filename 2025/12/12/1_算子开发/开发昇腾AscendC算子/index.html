@@ -19,7 +19,7 @@
     
     
     
-    <title>配置昇腾开发环境 | Hexo</title>
+    <title>开发昇腾AscendC算子 | Hexo</title>
 
     <!-- SEO Meta -->
     
@@ -27,29 +27,25 @@
     <meta name="author" content="Natdog" />
     
     
-    <meta name="keywords" content="昇腾, 环境配置" />
+    <meta name="keywords" content="昇腾, 算子" />
     
 
     <!-- Open Graph -->
-    <meta property="og:title" content="配置昇腾开发环境 | Hexo" />
+    <meta property="og:title" content="开发昇腾AscendC算子 | Hexo" />
     
-    <meta property="og:url" content="http://example.com/2026/05/24/3_%E7%8E%AF%E5%A2%83%E5%B7%A5%E7%A8%8B/%E9%85%8D%E7%BD%AE%E6%98%87%E8%85%BE%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/index.html" />
+    <meta property="og:url" content="http://example.com/2025/12/12/1_%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/%E5%BC%80%E5%8F%91%E6%98%87%E8%85%BEAscendC%E7%AE%97%E5%AD%90/index.html" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Hexo" />
     
-    <meta property="og:image" content="http://example.com/assets/%E9%85%8D%E7%BD%AE%E6%98%87%E8%85%BE%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/file-20251212194230679.png" />
-    
 
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="配置昇腾开发环境 | Hexo" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="开发昇腾AscendC算子 | Hexo" />
     
-    
-    <meta name="twitter:image" content="http://example.com/assets/%E9%85%8D%E7%BD%AE%E6%98%87%E8%85%BE%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/file-20251212194230679.png" />
     
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://example.com/2026/05/24/3_%E7%8E%AF%E5%A2%83%E5%B7%A5%E7%A8%8B/%E9%85%8D%E7%BD%AE%E6%98%87%E8%85%BE%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/index.html" />
+    <link rel="canonical" href="http://example.com/2025/12/12/1_%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/%E5%BC%80%E5%8F%91%E6%98%87%E8%85%BEAscendC%E7%AE%97%E5%AD%90/index.html" />
 
     <!-- Favicon -->
     
@@ -245,7 +241,7 @@
 <article class="content-article">
     <header class="text-center mb-8">
         <h1 class="page-title mb-4">
-            配置昇腾开发环境
+            开发昇腾AscendC算子
         </h1>
         
         
@@ -256,7 +252,7 @@
     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 </svg>
 
-        <a href="/archives/2026/" class="oldstyle-nums link-muted"><time datetime="2026-05-24">2026/05/24</time></a>
+        <a href="/archives/2025/" class="oldstyle-nums link-muted"><time datetime="2025-12-12">2025/12/12</time></a>
     </div>
     
         <span class="text-slate-300" aria-hidden="true">•</span>
@@ -268,7 +264,7 @@
 
             
                 
-                    <a class="link-muted" href="/categories/%E7%8E%AF%E5%A2%83%E5%B7%A5%E7%A8%8B/">环境工程</a>
+                    <a class="link-muted" href="/categories/%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/">算子开发</a>
                     
                 
             
@@ -308,70 +304,9 @@
     
 
     <div class="prose-shiro" data-pagefind-body>
-        <h1 id="配置昇腾开发环境"><a href="#配置昇腾开发环境" class="headerlink" title="配置昇腾开发环境"></a>配置昇腾开发环境</h1><h2 id="一、背景-为什么要学这个？"><a href="#一、背景-为什么要学这个？" class="headerlink" title="## 一、背景 &#x2F; 为什么要学这个？"></a>## 一、背景 &#x2F; 为什么要学这个？</h2><p>昇腾（Ascend）AI处理器现在用得越来越多了，不管是做AI模型训练还是推理，都可能用到它。但说实话，第一次配它的开发环境还挺麻烦的——要装驱动、装CANN套件、配环境变量，一步不对可能就卡住了。</p>
-<p>所以我就写了这篇文档，把配置的每一步都写清楚，配上命令和说明。目标很简单：让你照着做，就能把环境配好，少踩点坑，早点开始写你的AI代码。</p>
-<h2 id="二、环境准备"><a href="#二、环境准备" class="headerlink" title="二、环境准备"></a>二、环境准备</h2><h3 id="2-1-硬件背景"><a href="#2-1-硬件背景" class="headerlink" title="2.1 硬件背景"></a>2.1 硬件背景</h3><p>香橙派AIpro，（Ascend310B4），只有一个AICORE，算力8T</p>
-<h2 id="三、安装步骤详解"><a href="#三、安装步骤详解" class="headerlink" title="三、安装步骤详解"></a>三、安装步骤详解</h2><h3 id="3-1-驱动下载与安装"><a href="#3-1-驱动下载与安装" class="headerlink" title="3.1 驱动下载与安装"></a>3.1 驱动下载与安装</h3><h4 id="3-1-1官网上下载对应版本的toolkit工具包：下载地址"><a href="#3-1-1官网上下载对应版本的toolkit工具包：下载地址" class="headerlink" title="3.1.1官网上下载对应版本的toolkit工具包：下载地址"></a>3.1.1官网上下载对应版本的toolkit工具包：<a target="_blank" rel="noopener" href="https://www.hiascend.com/developer/download/community/result?module=cann&cann=8.5.0.alpha002">下载地址</a></h4><ul>
-<li><p>官网上找到对应文件<br><img src="/assets/%E9%85%8D%E7%BD%AE%E6%98%87%E8%85%BE%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/file-20251212194230679.png"></p>
-</li>
-<li><p>勾选设备的架构，软件包格式选择.run后缀的，架构可以根据下述指令获得</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">uname</span> -m</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>找到带toolkit的包下载<br><img src="/assets/%E9%85%8D%E7%BD%AE%E6%98%87%E8%85%BE%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/file-20251212194535360.png"></p>
-</li>
-<li><p>如果在服务器上下载的话，可以先点击下载软件包<br><img src="/assets/%E9%85%8D%E7%BD%AE%E6%98%87%E8%85%BE%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/file-20251212195050376.png"><br>暂停下载后右击复制下载链接，之后在服务器终端输入</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -O 输出文件名称（要带后缀） <span class="string">&quot;下载链接&quot;</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget _O 1.run <span class="string">&quot;https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/Milan-ASL/Milan-ASL%20V100R001C25B800TP028/Ascend-cann-toolkit_8.5.0.alpha002_linux-aarch64.run?response-content-type=application/octet-stream&quot;</span></span><br></pre></td></tr></table></figure>
-<p>效果如图所示，可以直接将文件下载在服务器上。<br><img src="/assets/%E9%85%8D%E7%BD%AE%E6%98%87%E8%85%BE%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/file-20251212195217188.png"></p>
-<h4 id="3-1-2工具包的安装"><a href="#3-1-2工具包的安装" class="headerlink" title="3.1.2工具包的安装"></a>3.1.2工具包的安装</h4><ol>
-<li>赋予工具包执行权限<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x 1.run</span><br></pre></td></tr></table></figure></li>
-<li>安装<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./1.run --install</span><br></pre></td></tr></table></figure>
-除了安装之外还有升级<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./1.run --upgrade</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="3-2-环境变量配置"><a href="#3-2-环境变量配置" class="headerlink" title="3.2 环境变量配置"></a>3.2 环境变量配置</h3><h2 id="四、环境验证"><a href="#四、环境验证" class="headerlink" title="四、环境验证"></a>四、环境验证</h2><h3 id="4-1-基础环境检查"><a href="#4-1-基础环境检查" class="headerlink" title="4.1 基础环境检查"></a>4.1 基础环境检查</h3><ul>
-<li>使用<code>npu-smi</code>命令查看设备状态</li>
-<li>检查驱动版本</li>
-<li>验证CANN安装</li>
-</ul>
-<h3 id="4-2-运行示例程序"><a href="#4-2-运行示例程序" class="headerlink" title="4.2 运行示例程序"></a>4.2 运行示例程序</h3><ul>
-<li>编译并运行简单的测试程序</li>
-<li>验证AI处理器正常工作</li>
-<li>常见问题排查</li>
-</ul>
-<h2 id="五、开发环境配置"><a href="#五、开发环境配置" class="headerlink" title="五、开发环境配置"></a>五、开发环境配置</h2><h3 id="5-1-IDE配置（如VSCode）"><a href="#5-1-IDE配置（如VSCode）" class="headerlink" title="5.1 IDE配置（如VSCode）"></a>5.1 IDE配置（如VSCode）</h3><ul>
-<li>插件安装</li>
-<li>调试环境配置</li>
-<li>代码补全设置</li>
-</ul>
-<h3 id="5-2-容器环境（可选）"><a href="#5-2-容器环境（可选）" class="headerlink" title="5.2 容器环境（可选）"></a>5.2 容器环境（可选）</h3><ul>
-<li>Docker镜像获取</li>
-<li>容器化开发环境搭建</li>
-<li>优势与使用场景</li>
-</ul>
-<h2 id="六、常见问题与解决方案"><a href="#六、常见问题与解决方案" class="headerlink" title="六、常见问题与解决方案"></a>六、常见问题与解决方案</h2><ul>
-<li>驱动安装失败的处理</li>
-<li>权限问题（如用户组添加）</li>
-<li>版本兼容性问题</li>
-<li>网络连接问题</li>
-</ul>
-<h2 id="七、最佳实践与建议"><a href="#七、最佳实践与建议" class="headerlink" title="七、最佳实践与建议"></a>七、最佳实践与建议</h2><ul>
-<li>环境备份策略</li>
-<li>版本管理建议</li>
-<li>性能优化配置</li>
-<li>安全注意事项</li>
-</ul>
-<h2 id="八、总结"><a href="#八、总结" class="headerlink" title="八、总结"></a>八、总结</h2><ul>
-<li>环境配置要点回顾</li>
-<li>后续学习路径建议</li>
-<li>资源推荐（官方文档、社区等）</li>
-</ul>
-<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><ul>
-<li>常用命令速查表</li>
-<li>官方资源链接</li>
-<li>版本兼容性矩阵</li>
-</ul>
-
+        <h1 id="昇腾AscendC算子"><a href="#昇腾AscendC算子" class="headerlink" title="昇腾AscendC算子"></a>昇腾AscendC算子</h1><h2 id="一、背景-为什么要学这个？"><a href="#一、背景-为什么要学这个？" class="headerlink" title="一、背景 &#x2F; 为什么要学这个？"></a>一、背景 &#x2F; 为什么要学这个？</h2><p>在昇腾 AI 芯片的开发中，要实现一些定制化的神经网络计算功能，就得自己写<strong>自定义算子</strong>。<br>而用 AscendC 开发算子的时候，步骤又多又杂：得写核心的计算代码、定义算子的输入输出接口、配置编译脚本，还要考虑怎么适配昇腾芯片的多核并行能力。很多开发者每次上手都要从头搭工程、配环境，重复工作量大，还容易踩坑。<br>所以就需要一个现成的模板，把通用的结构和代码都固定好，大家只要替换掉里面的核心计算逻辑，就能快速搞定一个新算子，不用再折腾那些重复的配置工作。</p>
+<h2 id="二、核心概念"><a href="#二、核心概念" class="headerlink" title="二、核心概念"></a>二、核心概念</h2><h2 id="三、关键点-示例"><a href="#三、关键点-示例" class="headerlink" title="三、关键点 &amp; 示例"></a>三、关键点 &amp; 示例</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="四、易错点-注意事项"><a href="#四、易错点-注意事项" class="headerlink" title="四、易错点 &#x2F; 注意事项"></a>四、易错点 &#x2F; 注意事项</h2><h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2>
     </div>
 
     <!-- Tags -->
@@ -387,9 +322,9 @@
 
         
         
-<a href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="tag-pill">
+<a href="/tags/%E7%AE%97%E5%AD%90/" class="tag-pill">
     <span class="size-1.5 rounded-full bg-slate-400 mr-2"></span>
-    环境配置
+    算子
     
 </a>
 
@@ -401,15 +336,15 @@
     <!-- Post Navigation: Hexo's page.prev = newer post, page.next = older post -->
     <div class="section-divider flex justify-between items-center text-sm md:text-base">
         
-        <a href="/2026/05/24/3_%E7%8E%AF%E5%A2%83%E5%B7%A5%E7%A8%8B/%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" class="post-nav-link group text-left" title="配置环境">
+        <a href="/2025/12/16/3_%E7%8E%AF%E5%A2%83%E5%B7%A5%E7%A8%8B/CUDA%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="post-nav-link group text-left" title="CUDA开发环境搭建">
              <span aria-hidden="true">&larr;</span>
-             <span class="post-nav-title">配置环境</span>
+             <span class="post-nav-title">CUDA开发环境搭建</span>
         </a>
         
 
         
-        <a href="/2026/05/24/4_%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/DataCopy%E9%97%AE%E9%A2%98/" class="post-nav-link group text-right" title="DataCopy问题">
-            <span class="post-nav-title">DataCopy问题</span>
+        <a href="/2025/12/12/3_%E7%8E%AF%E5%A2%83%E5%B7%A5%E7%A8%8B/%E9%85%8D%E7%BD%AE%E6%98%87%E8%85%BE%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="post-nav-link group text-right" title="配置昇腾开发环境">
+            <span class="post-nav-title">配置昇腾开发环境</span>
             <span aria-hidden="true">&rarr;</span>
         </a>
         
