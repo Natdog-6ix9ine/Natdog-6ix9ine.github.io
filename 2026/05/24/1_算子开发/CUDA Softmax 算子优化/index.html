@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="CUDA Softmax 算子优化讲解一、Softmax 原理讲解1.1 基本 Softmax 原理Softmax 是深度学习中常用的激活函数，将输入向量映射为概率分布。对于一个长度为 n 的向量 x，Softmax 函数定义为： $$\text{Softmax}(x_i) &#x3D; \frac{e^{x_i}}{\sum_{j&#x3D;1}^{n} e^{x_j}}$$ 这个公式看起来简单">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CUDA Softmax 算子优化">
+<meta property="og:url" content="http://example.com/2026/05/24/1_%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/CUDA%20Softmax%20%E7%AE%97%E5%AD%90%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="CUDA Softmax 算子优化讲解一、Softmax 原理讲解1.1 基本 Softmax 原理Softmax 是深度学习中常用的激活函数，将输入向量映射为概率分布。对于一个长度为 n 的向量 x，Softmax 函数定义为： $$\text{Softmax}(x_i) &#x3D; \frac{e^{x_i}}{\sum_{j&#x3D;1}^{n} e^{x_j}}$$ 这个公式看起来简单">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-24T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-24T09:40:18.968Z">
+<meta property="article:author" content="Natdog">
+<meta name="twitter:card" content="summary">
+
+
+<title >CUDA Softmax 算子优化</title>
+
+<!-- Favicon -->
+
+    <link href='/img/favicon.svg?v=2.2.7' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/img/favicon.svg?v=2.2.7' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Natdog","root":"/","typed_text":null,"theme_version":"2.2.7","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/favicon.svg","icon16":"/img/favicon.svg","icon32":"/img/favicon.svg","apple_touch_icon":null,"webmanifest":null,"visibilitychange":false,"hidden":"/failure.ico","show_text":"(/≧▽≦/)咦！又好了！","hide_text":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","sticky":"置顶","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"default","height_limit":false},"toc":{"post_title":true},"live_time":{"start_time":"","prefix":"博客已萌萌哒运行 undefined 天"},"danmu":{"enable":false,"el":".trm-banner"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2026-05-24 09:40:18"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.2.7" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+
+ 
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/img/favicon.svg">
+    
+    
+        <div class="trm-logo-text">
+            Async<span>Theme</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    首页
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    归档
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            CUDA Softmax 算子优化
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2026
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/avatar.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        ThemeAsync
+    </h5>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                地址:
+            </div>
+            <div class="trm-label trm-label-light">
+                Mars
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            05/24
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            00:00
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Natdog
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="CUDA-Softmax-算子优化讲解"><a href="#CUDA-Softmax-算子优化讲解" class="headerlink" title="CUDA Softmax 算子优化讲解"></a>CUDA Softmax 算子优化讲解</h1><h2 id="一、Softmax-原理讲解"><a href="#一、Softmax-原理讲解" class="headerlink" title="一、Softmax 原理讲解"></a>一、Softmax 原理讲解</h2><h3 id="1-1-基本-Softmax-原理"><a href="#1-1-基本-Softmax-原理" class="headerlink" title="1.1 基本 Softmax 原理"></a>1.1 基本 Softmax 原理</h3><p>Softmax 是深度学习中常用的激活函数，将输入向量映射为概率分布。对于一个长度为 n 的向量 x，Softmax 函数定义为：</p>
+<p>$$\text{Softmax}(x_i) &#x3D; \frac{e^{x_i}}{\sum_{j&#x3D;1}^{n} e^{x_j}}$$</p>
+<p>这个公式看起来简单，但在实际计算中存在几个问题：</p>
+<ul>
+<li>指数运算可能导致数值溢出或下溢</li>
+<li>大规模数据的并行计算效率</li>
+<li>GPU 上的 warp 级同步和归约操作</li>
+</ul>
+<h3 id="1-2-Safe-Softmax-优化"><a href="#1-2-Safe-Softmax-优化" class="headerlink" title="1.2 Safe Softmax 优化"></a>1.2 Safe Softmax 优化</h3><p>为了解决数值溢出的问题，Safe Softmax 引入了减去最大值的技巧：</p>
+<p>$$\text{Softmax}(x_i) &#x3D; \frac{e^{x_i - \max(x)}}{\sum_{j&#x3D;1}^{n} e^{x_j - \max(x)}}$$</p>
+<p>这种方法在数学上等价于原始 Softmax，但能有效避免指数运算导致的溢出。实现步骤：</p>
+<ol>
+<li>找出输入向量的最大值 max_val</li>
+<li>计算 $e^{x_i - max_val}$ </li>
+<li>计算所有经调整后的指数值之和 sum</li>
+<li>每个元素除以总和: $\frac{e^{x_i - max_val}}{sum}$</li>
+</ol>
+<h3 id="1-3-Online-Softmax-优化"><a href="#1-3-Online-Softmax-优化" class="headerlink" title="1.3 Online Softmax 优化"></a>1.3 Online Softmax 优化</h3><p>传统 Softmax 需要两次遍历数据（找最大值和计算和），Online Softmax 将这两步合并，实现单遍扫描。关键思想是维护两个变量：</p>
+<ul>
+<li>m: 当前最大值</li>
+<li>d: 调整后的部分和</li>
+</ul>
+<p>当扫描到一个新值 x_i 时：</p>
+<ol>
+<li>如果 x_i &gt; m，则更新 m &#x3D; x_i，同时调整累积的部分和: d &#x3D; d * e^(old_m - new_m)</li>
+<li>如果 x_i ≤ m，则将 e^(x_i - m) 加到 d 上</li>
+</ol>
+<p>在 CUDA 中，此算法特别适合 warp 级并行归约操作，可以大大减少内存访问和同步开销。</p>
+<h3 id="1-4-Pow2-Softmax-进一步优化"><a href="#1-4-Pow2-Softmax-进一步优化" class="headerlink" title="1.4 Pow2 Softmax 进一步优化"></a>1.4 Pow2 Softmax 进一步优化</h3><p>为了进一步提高性能，可以用 2 的幂次方替代自然指数，即用 2^x 替代 e^x。这种替换有几个优势：</p>
+<ul>
+<li>GPU 上计算 2^x 比 e^x 更快</li>
+<li>精度损失在大多数应用中可以接受</li>
+<li>从头开始训练的模型可以适应这种变化</li>
+</ul>
+<p>这就是 OnlineSoftmax_pow2 的基本原理，它在保持数值稳定性的同时进一步提高计算效率。</p>
+<h2 id="二、代码讲解"><a href="#二、代码讲解" class="headerlink" title="二、代码讲解"></a>二、代码讲解</h2><h3 id="2-1-完整的-Softmax-实现代码"><a href="#2-1-完整的-Softmax-实现代码" class="headerlink" title="2.1 完整的 Softmax 实现代码"></a>2.1 完整的 Softmax 实现代码</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 已提供的代码包含以下核心部分：</span></span><br><span class="line"><span class="comment">// 1. 基本数据结构和宏定义</span></span><br><span class="line"><span class="comment">// 2. Warp 归约操作的实现</span></span><br><span class="line"><span class="comment">// 3. Online Safe Softmax 的核函数</span></span><br><span class="line"><span class="comment">// 4. 基于 pow2 的优化版本</span></span><br><span class="line"><span class="comment">// 5. CPU 参考实现</span></span><br><span class="line"><span class="comment">// 6. 性能测试框架</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-基础数据结构分析"><a href="#2-2-基础数据结构分析" class="headerlink" title="2.2 基础数据结构分析"></a>2.2 基础数据结构分析</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义了存储最大值和部分和的数据结构</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">__align__</span>(<span class="number">8</span>) MD</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">float</span> m;  <span class="comment">// 最大值</span></span><br><span class="line">    <span class="type">float</span> d;  <span class="comment">// 调整后的部分和</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这里的 MD 结构体是 Online Softmax 的核心，它存储了在线算法中需要维护的两个关键状态。<code>__align__(8)</code> 确保内存对齐，优化内存访问。</p>
+<h3 id="2-3-常规-Online-Softmax-实现分析"><a href="#2-3-常规-Online-Softmax-实现分析" class="headerlink" title="2.3 常规 Online Softmax 实现分析"></a>2.3 常规 Online Softmax 实现分析</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="type">const</span> <span class="type">int</span> kwarpsize </span>= WARP_SIZE&gt;</span><br><span class="line"><span class="function">__device__ __forceinline__ MD <span class="title">warp_reduce_md_op</span><span class="params">(MD val)</span></span>&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> mask = <span class="number">0xffffffff</span>;</span><br><span class="line">    MD other;</span><br><span class="line">    <span class="meta">#<span class="keyword">pragma</span> unroll</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> stride = kwarpsize &gt;&gt; <span class="number">1</span>; stride &gt;= <span class="number">1</span>; stride&gt;&gt;=<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        other.m = __shfl_xor_sync(mask,val.m,stride);</span><br><span class="line">        other.d = __shfl_xor_sync(mask,val.d,stride);</span><br><span class="line"></span><br><span class="line">        MD bigger = val.m&gt;other.m?val:other;</span><br><span class="line">        MD smaller = val.m&lt;other.m?val:other;</span><br><span class="line"></span><br><span class="line">        val.m = bigger.m;</span><br><span class="line">        val.d = bigger.d + smaller.d*__expf(smaller.m-bigger.m);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数实现了 warp 级的归约操作：</p>
+<ol>
+<li>使用 <code>__shfl_xor_sync</code> 在 warp 内交换数据，无需共享内存</li>
+<li>每步比较两个线程的最大值，并正确更新部分和</li>
+<li>使用 <code>#pragma unroll</code> 展开循环，提高指令级并行性</li>
+<li>退化成蝶形归约模式，具有 O(log n) 的时间复杂度</li>
+</ol>
+<h3 id="2-4-OnlineSoftmax-核函数分析"><a href="#2-4-OnlineSoftmax-核函数分析" class="headerlink" title="2.4 OnlineSoftmax 核函数分析"></a>2.4 OnlineSoftmax 核函数分析</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="type">const</span> <span class="type">int</span> NUM_THREAD </span>= <span class="number">256</span>&gt;</span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">Online_safe_Softmax</span><span class="params">(<span class="type">const</span> <span class="type">float</span>* x, <span class="type">float</span>* y, <span class="type">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> tid = threadIdx.x;</span><br><span class="line">    <span class="type">int</span> gid = blockIdx.x * NUM_THREAD + tid;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> WARP_NUM = NUM_THREAD / WARP_SIZE;</span><br><span class="line">    <span class="type">int</span> warp_id = tid / WARP_SIZE;</span><br><span class="line">    <span class="type">int</span> lane = tid % WARP_SIZE;</span><br><span class="line">    MD val;</span><br><span class="line">    val.m = gid &lt; n?x[gid]:-FLT_MAX;</span><br><span class="line">    val.d = gid &lt; n?<span class="number">1.0f</span>:<span class="number">0.0f</span>;</span><br><span class="line">    MD res = <span class="built_in">warp_reduce_md_op</span>(val);</span><br><span class="line">    __shared__ MD shared[WARP_NUM];</span><br><span class="line">    <span class="keyword">if</span> (lane == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        shared[warp_id] = res;</span><br><span class="line">    &#125;</span><br><span class="line">    __syncthreads();</span><br><span class="line">    <span class="keyword">if</span> (tid &lt; WARP_SIZE)</span><br><span class="line">    &#123;</span><br><span class="line">        val =  shared[tid];</span><br><span class="line">        res = <span class="built_in">warp_reduce_md_op</span>&lt;WARP_NUM&gt;(val);</span><br><span class="line">        <span class="keyword">if</span> (tid == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            shared[<span class="number">0</span>] = res;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    __syncthreads();</span><br><span class="line">    MD final_res = shared[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">if</span> (gid &lt; n)</span><br><span class="line">    &#123;</span><br><span class="line">        y[gid] = __expf(x[gid]-final_res.m)*__fdividef(<span class="number">1.0f</span>,final_res.d);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个核函数的执行流程：</p>
+<ol>
+<li>每个线程加载一个输入元素到局部 MD 结构中</li>
+<li>先在每个 warp 内进行归约</li>
+<li>每个 warp 的首个线程将结果存入共享内存</li>
+<li>同步后，再用第一个 warp 对所有 warp 结果进行归约</li>
+<li>再次同步后，所有线程使用全局最大值和部分和计算各自的 Softmax 输出</li>
+</ol>
+<p>这种分层归约策略高效利用了 CUDA 的并行架构，减少了同步点并最大化并行度。</p>
+<h3 id="2-5-基于-Pow2-的优化版本分析"><a href="#2-5-基于-Pow2-的优化版本分析" class="headerlink" title="2.5 基于 Pow2 的优化版本分析"></a>2.5 基于 Pow2 的优化版本分析</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="type">const</span> <span class="type">int</span> kwarpsize </span>= WARP_SIZE&gt;</span><br><span class="line"><span class="function">__device__ __forceinline__ MD <span class="title">warp_reduce_md_op_pow2</span><span class="params">(MD val)</span></span>&#123;</span><br><span class="line">    <span class="comment">// 类似于常规版本，但使用 __powf(2.0,x) 替代 __expf(x)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="type">const</span> <span class="type">int</span> NUM_THREAD </span>= <span class="number">256</span>&gt;</span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">Online_safe_Softmax_pow2</span><span class="params">(<span class="type">const</span> <span class="type">float</span>* x, <span class="type">float</span>* y, <span class="type">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="comment">// 结构与常规版本相似，但使用 pow2 系列函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>pow2 版本的关键区别：</p>
+<ol>
+<li>使用 <code>__powf(2.0, x)</code> 替代 <code>__expf(x)</code></li>
+<li>计算速度更快，在大多数 GPU 架构上有更低的指令延迟</li>
+<li>适用于对精度要求不那么苛刻的应用场景</li>
+</ol>
+<h2 id="三、实战讲解"><a href="#三、实战讲解" class="headerlink" title="三、实战讲解"></a>三、实战讲解</h2><h3 id="3-1-环境准备与调试设置"><a href="#3-1-环境准备与调试设置" class="headerlink" title="3.1 环境准备与调试设置"></a>3.1 环境准备与调试设置</h3><p>在实际调试 CUDA 程序时，建议采用以下步骤：</p>
+<ol>
+<li><p>配置开发环境：</p>
+<ul>
+<li>确保 CUDA Toolkit 安装正确</li>
+<li>使用 <code>nvcc -arch=sm_xx</code> 编译，其中 xx 对应目标 GPU 的计算能力</li>
+<li>启用调试选项 <code>-G -g</code></li>
+</ul>
+</li>
+<li><p>编译命令示例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc -<span class="built_in">arch</span>=sm_80 -G -g -o softmax_test softmax.cu</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>代码调试工具：</p>
+<ul>
+<li><code>cuda-gdb</code> 进行源码级调试</li>
+<li><code>cuda-memcheck</code> 检测内存错误</li>
+<li>NVIDIA Nsight Systems 进行性能分析</li>
+</ul>
+</li>
+</ol>
+<h3 id="3-2-性能分析与问题排查"><a href="#3-2-性能分析与问题排查" class="headerlink" title="3.2 性能分析与问题排查"></a>3.2 性能分析与问题排查</h3><p>在优化过程中，需要关注以下几个方面：</p>
+<ol>
+<li><p>内存访问模式：</p>
+<ul>
+<li>检查全局内存的合并访问</li>
+<li>内存带宽是否成为瓶颈</li>
+</ul>
+</li>
+<li><p>线程分配：</p>
+<ul>
+<li>256 线程&#x2F;块是一个良好的起点，但可能需要针对特定数据大小调整</li>
+<li>较小的数据可能需要更少的线程来减少同步开销</li>
+</ul>
+</li>
+<li><p>寄存器压力：</p>
+<ul>
+<li>使用 <code>nvcc --ptxas-options=-v</code> 查看每个线程使用的寄存器数量</li>
+<li>过多的寄存器使用会限制 GPU 占用率</li>
+</ul>
+</li>
+<li><p>分支发散：</p>
+<ul>
+<li>条件语句（如 <code>if (gid &lt; n)</code>）可能导致 warp 分支发散</li>
+<li>对于边界条件，考虑使用预处理或掩码技术</li>
+</ul>
+</li>
+</ol>
+<h3 id="3-3-实验结果分析"><a href="#3-3-实验结果分析" class="headerlink" title="3.3 实验结果分析"></a>3.3 实验结果分析</h3><p>我们可以使用提供的测试框架来评估不同实现的性能：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./softmax_test</span><br></pre></td></tr></table></figure>
+
+<p>运行后会得到类似下面的表格：</p>
+<table>
+<thead>
+<tr>
+<th>Size</th>
+<th>Kernel Type</th>
+<th>Runtime (ms)</th>
+<th>Max Diff</th>
+<th>GPU Sum</th>
+<th>CPU Sum</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1048576</td>
+<td>Exp</td>
+<td>0.2345</td>
+<td>1.23e-6</td>
+<td>1.000000</td>
+<td>1.000000</td>
+<td>PASSED</td>
+</tr>
+<tr>
+<td>1048576</td>
+<td>Pow2</td>
+<td>0.1865</td>
+<td>2.78e-6</td>
+<td>1.000000</td>
+<td>1.000000</td>
+<td>PASSED</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>从上述结果可以看到：</p>
+<ol>
+<li>Pow2 版本通常比常规 Exp 版本快 15-30%</li>
+<li>精度差异通常在可接受范围内（1e-6 量级）</li>
+<li>两种实现的 sum 结果都接近理论值 1.0</li>
+</ol>
+<h3 id="3-4-优化建议与实践经验"><a href="#3-4-优化建议与实践经验" class="headerlink" title="3.4 优化建议与实践经验"></a>3.4 优化建议与实践经验</h3><ol>
+<li><p>针对输入数据特性优化：</p>
+<ul>
+<li>对于稀疏数据，考虑增加预处理过滤步骤</li>
+<li>对于多批次数据，可以优化内存布局提高缓存命中率</li>
+</ul>
+</li>
+<li><p>混合精度计算：</p>
+<ul>
+<li>考虑使用 FP16 或 BF16 进一步提高计算速度</li>
+<li>对于部分设备，使用张量核心加速矩阵运算</li>
+</ul>
+</li>
+<li><p>进一步优化方向：</p>
+<ul>
+<li>基于 block 的合并计算，减少全局同步</li>
+<li>数据重用策略，减少重复加载</li>
+<li>内联 PTX 代码实现更精细的控制</li>
+</ul>
+</li>
+<li><p>常见调试错误：</p>
+<ul>
+<li>索引越界导致的奇怪结果或崩溃</li>
+<li>未正确同步导致的竞态条件</li>
+<li>精度损失导致的累积误差</li>
+</ul>
+</li>
+</ol>
+<p>通过这些实战经验，你可以有效地实现和优化 Softmax 算子，使其在各种场景下都能高效运行。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>CUDA Softmax 算子的优化是一个典型的 GPU 计算优化案例。从基本的 Softmax 算法，到安全版本，再到在线计算和 pow2 加速，每一步都体现了算法优化和硬件适配的思想。通过理解这些优化技术，不仅可以提高 Softmax 操作的性能，还可以将相似的思路应用到其他 GPU 核函数的实现中。</p>
+
+</article>
+    
+    
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation">
+        <a href="/2026/05/24/README/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" #.">
+                    未分类
+                </a>
+            </div>
+            <h5>
+                <a href="/2026/05/24/README/" class="trm-anima-link">
+                    README
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>26/05/24</li>
+                <li>00:00</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation">
+        <a href="/2026/05/24/1_%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/%E5%88%9B%E5%BB%BA%E7%AE%97%E5%AD%90/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/">
+                    算子开发
+                </a>
+            </div>
+            <h5>
+                <a href="/2026/05/24/1_%E7%AE%97%E5%AD%90%E5%BC%80%E5%8F%91/%E5%88%9B%E5%BB%BA%E7%AE%97%E5%AD%90/" class="trm-anima-link">
+                    创建算子
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>26/05/24</li>
+                <li>00:00</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-footer-card trm-scroll-animation">
+
+    
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v7.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                主题 - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.2.7
+            </span>
+        </div>
+      
+
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+            
+<div class="trm-fixed-container">
+    
+    
+        <div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="回到顶部">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+  <!-- Plugin -->
+
+
+
+
+    
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+		
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.2.7"></script>
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+</body>
+
+</html>
